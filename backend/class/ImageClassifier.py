@@ -1,6 +1,8 @@
 from Class.model import EmotionCNN
 from torchvision import transforms
 import torch
+import io
+from PIL import Image
 
 class ImageClassifer:
     def __init__(self, path:str):
@@ -34,8 +36,11 @@ class ImageClassifer:
     def predict_image(self, jpg):
         if self.model == None:
             return "Model isn't loading!"
+        
+        image = Image.open(io.BytesIO(jpg))
+        image = image.convert("L")
         with torch.no_grad():
-            image = self.transform(jpg).unsqueeze(0).to(self.device)
+            image = self.transform(image).unsqueeze(0).to(self.device)
             output = self.model(image)
-            _, indexs = torch.argmax(output.data, dim=1) 
-            return self.result[indexs[0]]
+            indexs = torch.argmax(output.data, dim=1) 
+            return self.result[indexs.item()]
