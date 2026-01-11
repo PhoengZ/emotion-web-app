@@ -31,10 +31,11 @@ class ImageClassifer:
         self.model.eval()
         print("Successfully loading model!")
     
-    def predict_image(self, pixel_values):
+    def predict_image(self, jpg):
         if self.model == None:
             return "Model isn't loading!"
         with torch.no_grad():
-            output = self.model(pixel_values)
-            _, index = torch.argmax(output.data, dim=1) 
-            return self.result[index]
+            image = self.transform(jpg).unsqueeze(0).to(self.device)
+            output = self.model(image)
+            _, indexs = torch.argmax(output.data, dim=1) 
+            return self.result[indexs[0]]
