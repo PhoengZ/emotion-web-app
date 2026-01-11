@@ -3,9 +3,27 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 from controllers import ai
+from contextlib import asynccontextmanager
+from Class.model import EmotionCNN
+import torch
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model
+    try:
+        model = EmotionCNN()
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model.load_state_dict(torch.load("emotion_model.pth", torch.device(device)))
+        model.eval()
+        print("Successfully Loading Model!")
+    except Exception as e:
+        print("Failed to load emotion model!")
+        model = None
+    
+    yield
+    model = None
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(router=ai.router, prefix="/api/ai", tags=["AI"])
 
