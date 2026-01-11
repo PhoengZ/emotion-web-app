@@ -6,4 +6,6 @@ router = APIRouter()
 async def getEmotions(req):
     if model == None:
         return {"error":"Model not loaded"}
+    
+    
     return 
