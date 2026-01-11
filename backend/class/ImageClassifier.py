@@ -1,4 +1,4 @@
-from model import EmotionCNN
+from Class.model import EmotionCNN
 from torchvision import transforms
 import torch
 

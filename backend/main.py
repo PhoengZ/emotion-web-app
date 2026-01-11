@@ -4,25 +4,21 @@ import os
 from dotenv import load_dotenv
 from controllers import ai
 from contextlib import asynccontextmanager
-from Class.ImageClassifier import ImageClassifer
+from services.ai_services import ai_service
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model
     try:
         # model = EmotionCNN()
         # device = "cuda" if torch.cuda.is_available() else "cpu"
         # model.load_state_dict(torch.load("emotion_model.pth", torch.device(device)))
         # model.eval()
-        # print("Successfully Loading Model!")
-        model = ImageClassifer("emotion_model.pth")
-        model.model_loader()
-
+        ai_service.model_loader()
+        print("Successfully Loading Model!")
     except Exception as e:
         print("Failed to load emotion model!")
-        model = None   
     yield
-    model = None
+    print("Shutting down!")
 
 app = FastAPI(lifespan=lifespan)
 
