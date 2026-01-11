@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class EmotionBody(BaseModel):
-    pixel_values:list(float)
+    pixel_values: list[float]
 
