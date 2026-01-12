@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from controllers import ai
 from contextlib import asynccontextmanager
 from services.ai_services import ai_service
-
+from fastapi.middleware.cors import CORSMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -21,6 +21,13 @@ async def lifespan(app: FastAPI):
     print("Shutting down!")
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router=ai.router, prefix="/api/ai", tags=["AI"])
 
