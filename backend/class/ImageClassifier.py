@@ -1,5 +1,6 @@
 from Class.model import EmotionCNN
 from torchvision import transforms
+import torch.nn.functional as F
 import torch
 import io
 from PIL import Image
@@ -42,5 +43,6 @@ class ImageClassifer:
         with torch.no_grad():
             image = self.transform(image).unsqueeze(0).to(self.device)
             output = self.model(image)
-            indexs = torch.argmax(output.data, dim=1) 
-            return self.result[indexs.item()]
+            prob = F.softmax(output, dim=1)
+            response = prob[0].tolist()
+            return response

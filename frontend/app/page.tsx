@@ -1,6 +1,15 @@
 'use client'
-import { log } from "console";
 import { useEffect, useRef, useState } from "react";
+
+const emotion = {
+    0:"Angry",
+    1:"Disgust",
+    2:"Fear",
+    3:"Happy",
+    4:"Sad",
+    5:"Surprise",
+    6:"Neutral"
+}
 
 export default function Home() {
   const [camera, setCamera] = useState<Boolean>(true)
@@ -8,6 +17,7 @@ export default function Home() {
   const streamRef = useRef<MediaStream | null>(null)
   const [file, setFile] = useState<File | null>(null)
   const inputHTMLFileRef = useRef<HTMLInputElement>(null)
+  const [emotion, setEmotion] = useState<number[]>([0.7,0,5,0.3,0.4,0.5,0.6,0.7])
   useEffect(()=>{
     const startCamera = async()=>{
       try{
@@ -131,14 +141,13 @@ export default function Home() {
                   <img src={URL.createObjectURL(file)} alt="Preview" className="object-contain rounded-2xl" />
                 )}
               </div>              
-              <div className=" h-full">
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
-                <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
+              <div className="h-full">
+                {}
+                <div className="flex flex-col justify-center items-center w-full h-full">
+                  <div className={`w-full bg-blue-300 rounded-t-2xl ${emotion}`}></div>
+                  <h3 className="text-left font-bold text-lg text-gray-600">Happy</h3>
+                </div>
+
               </div>
             </div>
         </div>
